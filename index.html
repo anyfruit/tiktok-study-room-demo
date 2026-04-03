@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>互动自习班直播间 Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">TikTok / Douyin Study Classroom Demo</p>
+          <h1>班主任互动自习班 · 大场景占位版</h1>
+          <p class="subtitle">弹幕签到、礼物入座、番茄钟、老师巡查、感谢播报</p>
+        </div>
+        <div class="top-stats">
+          <div class="pill live">LIVE</div>
+          <div class="pill">无真人出镜</div>
+          <div class="pill">互动教室</div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="stage-card">
+          <div class="stage-header">
+            <div>
+              <h2>直播主画面</h2>
+              <p>更接近你发的那种“大场景坑位 + 班主任巡查”</p>
+            </div>
+            <div class="status-chips">
+              <div class="chip"><span>已入座</span><strong id="seat-count">0/24</strong></div>
+              <div class="chip"><span>累计礼物</span><strong id="gift-count">0</strong></div>
+              <div class="chip"><span>在线人数</span><strong id="viewer-count">213</strong></div>
+            </div>
+          </div>
+
+          <div class="classroom-scene" id="scene">
+            <div class="ticker" id="ticker">班主任：准备上课，先签到再坐下。</div>
+
+            <div class="top-overlay">
+              <div class="board-card timer-card">
+                <span>番茄钟</span>
+                <strong id="timer-label">专注中</strong>
+                <div class="timer-digits" id="timer-digits">25:00</div>
+              </div>
+              <div class="board-card">
+                <span>当前任务</span>
+                <strong>晚间专注班</strong>
+                <small>25 分钟学习 / 5 分钟休息</small>
+              </div>
+              <div class="board-card">
+                <span>课堂规则</span>
+                <strong>签到入座，别摸鱼</strong>
+                <small>礼物可升级前排 / 点亮书桌</small>
+              </div>
+            </div>
+
+            <div class="blackboard">
+              <div class="blackboard-inner">
+                <div class="chalk-title">今日班会</div>
+                <div class="chalk-line">1. 完成一轮深度学习</div>
+                <div class="chalk-line">2. 不刷手机</div>
+                <div class="chalk-line">3. 留在座位上直到下课</div>
+              </div>
+            </div>
+
+            <div class="teacher-lane">
+              <div class="teacher" id="teacher">
+                <div class="teacher-head"></div>
+                <div class="teacher-body"></div>
+                <div class="teacher-pointer"></div>
+              </div>
+            </div>
+
+            <div class="teacher-panel" id="teacher-panel">
+              <div class="teacher-avatar-wrap">
+                <div class="teacher-avatar-face"></div>
+                <div class="teacher-voice-ring"></div>
+              </div>
+              <div class="teacher-copy">
+                <p class="teacher-role">AI 班主任 · 巡查中</p>
+                <h3 id="teacher-line">准备上课，先签到再坐下。</h3>
+                <p id="teacher-subline">这块在真直播里负责 TTS、点名、感谢礼物、催学习。</p>
+              </div>
+            </div>
+
+            <div class="classroom-grid" id="classroom-grid"></div>
+
+            <div class="bottom-overlay">
+              <div class="panel-card accent">
+                <span>弹幕指令</span>
+                <strong>签到 / 入座 / 1</strong>
+              </div>
+              <div class="panel-card accent-2">
+                <span>礼物效果</span>
+                <strong>前排升级 / 点亮书桌 / 点名感谢</strong>
+              </div>
+              <div class="panel-card accent-3">
+                <span>巡查状态</span>
+                <strong id="patrol-status">老师正在第 1 排巡查</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="control-card">
+          <h2>控制台</h2>
+          <p class="muted">这里模拟 TikTok 弹幕、礼物、老师巡查和番茄钟。</p>
+
+          <div class="form-grid">
+            <label>
+              用户名
+              <input id="username" type="text" value="dotdot" placeholder="比如 studypig" />
+            </label>
+            <label>
+              头像文字
+              <input id="avatarText" type="text" value="DD" maxlength="3" placeholder="2字母/emoji" />
+            </label>
+          </div>
+
+          <div class="section-block">
+            <h3>弹幕 / 入座</h3>
+            <div class="button-row wrap">
+              <button data-action="comment-join">弹幕签到</button>
+              <button data-action="comment-seat">弹幕入座</button>
+              <button data-action="free-seat" class="ghost">随机旁听</button>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <h3>礼物 / 升级</h3>
+            <div class="button-row wrap">
+              <button data-action="gift-rose">送玫瑰</button>
+              <button data-action="gift-coffee">送咖啡</button>
+              <button data-action="gift-front">抢前排</button>
+              <button data-action="gift-lamp">点亮书桌</button>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <h3>课堂控制</h3>
+            <div class="button-row wrap">
+              <button data-action="timer-toggle">开始 / 暂停番茄钟</button>
+              <button data-action="timer-skip" class="ghost">切换专注/休息</button>
+              <button data-action="patrol-now" class="ghost">老师巡查</button>
+              <button data-action="reset" class="ghost danger">重置</button>
+            </div>
+          </div>
+
+          <div class="notes-box">
+            <h3>直播链路建议</h3>
+            <ul>
+              <li>最稳：浏览器场景 / 本地网页 → OBS 组合场景 → TikTok 推流。</li>
+              <li>如果账号有 stream key：OBS 可直接推 TikTok。</li>
+              <li>如果没 stream key：OBS 走窗口捕获/虚拟摄像头 → TikTok LIVE Studio。</li>
+              <li>完全零人工不现实：LIVE access、登录、推流授权这几步通常要你本人过。</li>
+            </ul>
+          </div>
+
+          <div class="event-log-box">
+            <div class="log-head">
+              <h3>课堂日志</h3>
+              <span id="class-summary">0/24 已入座</span>
+            </div>
+            <ul id="event-log"></ul>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
