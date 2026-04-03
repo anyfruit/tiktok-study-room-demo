@@ -1,174 +1,227 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>互动自习班直播间 Demo</title>
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body>
-    <div class="app-shell">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">TikTok / Douyin Study Classroom Demo</p>
-          <h1>班主任互动自习班 · 大场景占位版</h1>
-          <p class="subtitle">弹幕签到、礼物入座、番茄钟、老师巡查、感谢播报</p>
-        </div>
-        <div class="top-stats">
-          <div class="pill live">LIVE</div>
-          <div class="pill">无真人出镜</div>
-          <div class="pill">互动教室</div>
-        </div>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>24小时线上自习室 · AI班主任陪伴</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+<div class="app">
 
-      <main class="layout">
-        <section class="stage-card">
-          <div class="stage-header">
-            <div>
-              <h2>直播主画面</h2>
-              <p>更接近你发的那种“大场景坑位 + 班主任巡查”</p>
-            </div>
-            <div class="status-chips">
-              <div class="chip"><span>已入座</span><strong id="seat-count">0/24</strong></div>
-              <div class="chip"><span>累计礼物</span><strong id="gift-count">0</strong></div>
-              <div class="chip"><span>在线人数</span><strong id="viewer-count">213</strong></div>
-            </div>
-          </div>
-
-          <div class="classroom-scene" id="scene">
-            <div class="ticker" id="ticker">班主任：准备上课，先签到再坐下。</div>
-
-            <div class="top-overlay">
-              <div class="board-card timer-card">
-                <span>番茄钟</span>
-                <strong id="timer-label">专注中</strong>
-                <div class="timer-digits" id="timer-digits">25:00</div>
-              </div>
-              <div class="board-card">
-                <span>当前任务</span>
-                <strong>晚间专注班</strong>
-                <small>25 分钟学习 / 5 分钟休息</small>
-              </div>
-              <div class="board-card">
-                <span>课堂规则</span>
-                <strong>签到入座，别摸鱼</strong>
-                <small>礼物可升级前排 / 点亮书桌</small>
-              </div>
-            </div>
-
-            <div class="blackboard">
-              <div class="blackboard-inner">
-                <div class="chalk-title">今日班会</div>
-                <div class="chalk-line">1. 完成一轮深度学习</div>
-                <div class="chalk-line">2. 不刷手机</div>
-                <div class="chalk-line">3. 留在座位上直到下课</div>
-              </div>
-            </div>
-
-            <div class="teacher-lane">
-              <div class="teacher" id="teacher">
-                <div class="teacher-head"></div>
-                <div class="teacher-body"></div>
-                <div class="teacher-pointer"></div>
-              </div>
-            </div>
-
-            <div class="teacher-panel" id="teacher-panel">
-              <div class="teacher-avatar-wrap">
-                <div class="teacher-avatar-face"></div>
-                <div class="teacher-voice-ring"></div>
-              </div>
-              <div class="teacher-copy">
-                <p class="teacher-role">AI 班主任 · 巡查中</p>
-                <h3 id="teacher-line">准备上课，先签到再坐下。</h3>
-                <p id="teacher-subline">这块在真直播里负责 TTS、点名、感谢礼物、催学习。</p>
-              </div>
-            </div>
-
-            <div class="classroom-grid" id="classroom-grid"></div>
-
-            <div class="bottom-overlay">
-              <div class="panel-card accent">
-                <span>弹幕指令</span>
-                <strong>签到 / 入座 / 1</strong>
-              </div>
-              <div class="panel-card accent-2">
-                <span>礼物效果</span>
-                <strong>前排升级 / 点亮书桌 / 点名感谢</strong>
-              </div>
-              <div class="panel-card accent-3">
-                <span>巡查状态</span>
-                <strong id="patrol-status">老师正在第 1 排巡查</strong>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <aside class="control-card">
-          <h2>控制台</h2>
-          <p class="muted">这里模拟 TikTok 弹幕、礼物、老师巡查和番茄钟。</p>
-
-          <div class="form-grid">
-            <label>
-              用户名
-              <input id="username" type="text" value="dotdot" placeholder="比如 studypig" />
-            </label>
-            <label>
-              头像文字
-              <input id="avatarText" type="text" value="DD" maxlength="3" placeholder="2字母/emoji" />
-            </label>
-          </div>
-
-          <div class="section-block">
-            <h3>弹幕 / 入座</h3>
-            <div class="button-row wrap">
-              <button data-action="comment-join">弹幕签到</button>
-              <button data-action="comment-seat">弹幕入座</button>
-              <button data-action="free-seat" class="ghost">随机旁听</button>
-            </div>
-          </div>
-
-          <div class="section-block">
-            <h3>礼物 / 升级</h3>
-            <div class="button-row wrap">
-              <button data-action="gift-rose">送玫瑰</button>
-              <button data-action="gift-coffee">送咖啡</button>
-              <button data-action="gift-front">抢前排</button>
-              <button data-action="gift-lamp">点亮书桌</button>
-            </div>
-          </div>
-
-          <div class="section-block">
-            <h3>课堂控制</h3>
-            <div class="button-row wrap">
-              <button data-action="timer-toggle">开始 / 暂停番茄钟</button>
-              <button data-action="timer-skip" class="ghost">切换专注/休息</button>
-              <button data-action="patrol-now" class="ghost">老师巡查</button>
-              <button data-action="reset" class="ghost danger">重置</button>
-            </div>
-          </div>
-
-          <div class="notes-box">
-            <h3>直播链路建议</h3>
-            <ul>
-              <li>最稳：浏览器场景 / 本地网页 → OBS 组合场景 → TikTok 推流。</li>
-              <li>如果账号有 stream key：OBS 可直接推 TikTok。</li>
-              <li>如果没 stream key：OBS 走窗口捕获/虚拟摄像头 → TikTok LIVE Studio。</li>
-              <li>完全零人工不现实：LIVE access、登录、推流授权这几步通常要你本人过。</li>
-            </ul>
-          </div>
-
-          <div class="event-log-box">
-            <div class="log-head">
-              <h3>课堂日志</h3>
-              <span id="class-summary">0/24 已入座</span>
-            </div>
-            <ul id="event-log"></ul>
-          </div>
-        </aside>
-      </main>
+  <!-- ========= 顶部 Header ========= -->
+  <header class="app-header">
+    <div class="header-left">
+      <span class="live-badge">● LIVE</span>
+      <h1 class="header-title">24小时自习室 · AI班主任陪伴</h1>
     </div>
+    <div class="header-stats">
+      <div class="stat-item">
+        <span class="stat-icon">👥</span>
+        <span id="viewer-count">156</span>
+        <span class="stat-label">在线</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">🪑</span>
+        <span id="seat-count">0</span><span class="stat-slash">/24</span>
+        <span class="stat-label">入座</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">🎁</span>
+        <span id="gift-total">0</span>
+        <span class="stat-label">礼物</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">🍅</span>
+        <span id="pomo-count">0</span>
+        <span class="stat-label">番茄</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="real-clock" id="real-clock">00:00:00</div>
+      <div class="session-badge" id="session-badge">📚 自习中</div>
+    </div>
+  </header>
 
-    <script src="./app.js"></script>
-  </body>
+  <!-- ========= 主体区域 ========= -->
+  <div class="app-body">
+
+    <!-- 左侧：直播主画面 -->
+    <main class="stage-wrap">
+
+      <!-- 弹幕浮层（pointer-events: none, z-index 最高） -->
+      <div class="danmaku-layer" id="danmaku-layer"></div>
+
+      <!-- 礼物 Toast 区域 -->
+      <div class="gift-toast-area" id="gift-toast-area"></div>
+
+      <!-- 主场景 -->
+      <div class="scene" id="scene">
+
+        <!-- 通知Ticker -->
+        <div class="ticker" id="ticker">
+          <span class="ticker-icon">📢</span>
+          <span id="ticker-text">自习室已开始，同学们发弹幕 #打卡 或 #入座 加入学习！</span>
+        </div>
+
+        <!-- 教室顶部区：窗户 + 黑板 + 时钟 -->
+        <div class="room-top">
+
+          <!-- 左窗户 -->
+          <div class="window window-left">
+            <div class="window-frame">
+              <div class="window-pane" id="window-pane-left"></div>
+            </div>
+            <div class="window-sill"></div>
+          </div>
+
+          <!-- 黑板区 -->
+          <div class="blackboard-wrap">
+            <div class="room-clock" id="classroom-clock">00:00</div>
+            <div class="blackboard">
+              <div class="bb-inner">
+                <div class="bb-title">📚 今日自习目标</div>
+                <div class="bb-line">① 完成今日学习计划</div>
+                <div class="bb-line">② 坚持番茄工作法 🍅</div>
+                <div class="bb-line">③ 每小时起身活动5分钟</div>
+              </div>
+            </div>
+            <!-- 番茄钟区 -->
+            <div class="pomo-panel">
+              <div class="pomo-top">
+                <span class="pomo-label" id="pomo-label">🍅 专注中</span>
+                <span class="pomo-time" id="timer-display">25:00</span>
+              </div>
+              <div class="pomo-track">
+                <div class="pomo-bar" id="pomo-bar"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右窗户 -->
+          <div class="window window-right">
+            <div class="window-frame">
+              <div class="window-pane" id="window-pane-right"></div>
+            </div>
+            <div class="window-sill"></div>
+          </div>
+        </div>
+
+        <!-- 植物装饰 -->
+        <div class="plant plant-left">🪴</div>
+        <div class="plant plant-right">🌿</div>
+
+        <!-- 老师巡查通道 -->
+        <div class="teacher-lane" id="teacher-lane">
+          <div class="teacher-char" id="teacher-char">
+            <div class="teacher-head"></div>
+            <div class="teacher-body"></div>
+            <div class="teacher-pointer"></div>
+          </div>
+          <!-- 老师对话气泡 -->
+          <div class="teacher-bubble" id="teacher-bubble">
+            <div class="bubble-main" id="teacher-main">同学们，今天也要认真学习哦！</div>
+            <div class="bubble-sub" id="teacher-sub">加油！💪</div>
+          </div>
+        </div>
+
+        <!-- 座位网格 (4排×6列 = 24座) -->
+        <div class="desk-rows" id="desk-rows"></div>
+
+        <!-- 底部信息栏 -->
+        <div class="scene-footer">
+          <div class="footer-pill">💬 弹幕 <strong>#打卡</strong> 或 <strong>#入座</strong> 加入自习</div>
+          <div class="footer-pill">🎁 送礼物获得专属座位特效与排名</div>
+          <div class="footer-pill" id="patrol-status">🚶 老师待机中...</div>
+        </div>
+
+      </div><!-- /scene -->
+    </main>
+
+    <!-- 右侧：控制面板 -->
+    <aside class="control-panel">
+
+      <!-- 当前时段 -->
+      <div class="panel-card session-card">
+        <div class="card-title">📅 当前时段</div>
+        <div class="session-name" id="session-name">自习场</div>
+        <div class="session-desc" id="session-desc">认真学习，共同进步</div>
+      </div>
+
+      <!-- 礼物排行榜 -->
+      <div class="panel-card lb-card">
+        <div class="card-title">🏆 礼物榜 TOP5</div>
+        <div class="leaderboard" id="leaderboard">
+          <div class="lb-empty">暂无上榜，快来送礼物！</div>
+        </div>
+      </div>
+
+      <!-- 测试用户 -->
+      <div class="panel-card">
+        <div class="card-title">👤 测试用户</div>
+        <div class="input-row">
+          <input type="text" id="inp-user" placeholder="弹幕用户名" value="小明同学" />
+          <input type="text" id="inp-avatar" placeholder="头像(2字)" value="明" />
+        </div>
+      </div>
+
+      <!-- 弹幕互动 -->
+      <div class="panel-card">
+        <div class="card-title">💬 弹幕互动</div>
+        <div class="btn-grid">
+          <button data-action="checkin">📋 #打卡入座</button>
+          <button data-action="seat">🪑 #入座</button>
+          <button data-action="study">📖 #开始学习</button>
+          <button data-action="leave" class="ghost">🚶 离开座位</button>
+        </div>
+      </div>
+
+      <!-- 礼物效果 -->
+      <div class="panel-card">
+        <div class="card-title">🎁 礼物效果</div>
+        <div class="btn-grid">
+          <button data-action="gift-rose">🌹 玫瑰 ×1</button>
+          <button data-action="gift-coffee">☕ 咖啡 ×5</button>
+          <button data-action="gift-star">⭐ 星星 ×10</button>
+          <button data-action="gift-front">👑 前排票 ×20</button>
+          <button data-action="gift-lamp">🔦 台灯 ×50</button>
+          <button data-action="gift-rocket">🚀 火箭 ×100</button>
+        </div>
+      </div>
+
+      <!-- 教室控制 -->
+      <div class="panel-card">
+        <div class="card-title">⚙️ 教室控制</div>
+        <div class="btn-grid">
+          <button data-action="toggle-timer">⏯️ 开始/暂停</button>
+          <button data-action="skip-timer" class="ghost">⏭️ 切换模式</button>
+          <button data-action="patrol" class="ghost">🚶 手动巡查</button>
+          <button data-action="auto-sim" id="btn-autosim">🤖 自动模拟</button>
+          <button data-action="reset" class="ghost danger">🔄 重置</button>
+        </div>
+      </div>
+
+      <!-- 直播建议 -->
+      <div class="panel-card notes-card">
+        <div class="card-title">📡 OBS推流建议</div>
+        <ul class="notes-list">
+          <li>网页 → OBS 浏览器源 → TikTok RTMP</li>
+          <li>无 stream key：OBS → 虚拟摄像头 → LIVE Studio</li>
+          <li>推荐分辨率：1920×1080，60fps</li>
+          <li>开启自动模拟可24小时无人值守</li>
+        </ul>
+      </div>
+
+      <!-- 教室日志 -->
+      <div class="panel-card log-card">
+        <div class="card-title">📜 教室日志</div>
+        <div class="log-list" id="log-list"></div>
+      </div>
+
+    </aside>
+  </div><!-- /app-body -->
+</div><!-- /app -->
+
+<script src="./app.js"></script>
+</body>
 </html>
